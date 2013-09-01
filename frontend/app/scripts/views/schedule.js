@@ -14,7 +14,9 @@ define([
         events: {
             'click a[data-internal]': function(e) {
                 e.preventDefault();
-                Backbone.history.navigate(e.target.pathname, {trigger: true});
+                Backbone.history.navigate($(e.target).attr('href')
+                                                     .replace(/^\/?#/, ''),
+                                         {trigger: true});
             }
         },
     });

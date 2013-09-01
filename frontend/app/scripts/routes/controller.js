@@ -15,7 +15,7 @@ define([
             console.log("RouterController schedule");
             $("#app").empty();
         },
-        view_schedules: function() {
+        index: function() {
             console.log("RouterController schedules");
             this.schedulesCollection = new SchedulesCollection();
             this.schedulesView = new SchedulesView({

@@ -17,7 +17,7 @@ define([
     var App = new Backbone.Marionette.Application();
     App.addRegions({});
     App.addInitializer(function() {
-        Backbone.history.start({pushState: true});
+        Backbone.history.start({pushState: false});
     });
 
     return App;

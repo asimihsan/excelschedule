@@ -8,7 +8,7 @@ define([
         controller: new RouteController(),
         appRoutes: {
             'schedule/:slug':   'view_schedule',
-            '':                 'view_schedules',
+            '':                 'index',
         },
     });
 
