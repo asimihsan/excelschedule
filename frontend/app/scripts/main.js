@@ -13,6 +13,12 @@ require.config({
             ],
             exports: 'Backbone'
         },
+        'backbone.marionette': {
+            deps: [
+                'backbone',
+            ],
+            exports: 'Backbone'
+        },
         bootstrap: {
             deps: ['jquery'],
             exports: 'jquery'
@@ -21,6 +27,7 @@ require.config({
     paths: {
         jquery: '../bower_components/jquery/jquery',
         backbone: '../bower_components/backbone/backbone',
+        'backbone.marionette': '../bower_components/backbone.marionette/lib/backbone.marionette',
         lodash: '../bower_components/lodash/lodash',
         bootstrap: 'vendor/bootstrap'
     }
@@ -28,12 +35,8 @@ require.config({
 
 require([
     'backbone',
-    'views/app',
-    'routes/router',
-], function (Backbone, App, Router) {
-    new Router();
-
-    var app = new App();
-    app.start();
-    app.render();
+    'application',
+    'regionManager',
+], function (Backbone, App) {
+    App.start();
 });

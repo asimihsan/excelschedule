@@ -1,16 +1,16 @@
-/*global define*/
-
 define([
-    'jquery',
-    'backbone'
-], function ($, Backbone) {
+    'backbone.marionette',
+    'routes/controller'
+], function(Backbone, RouteController) {
     'use strict';
 
-    var RouterRouter = Backbone.Router.extend({
-        routes: {
-        }
-
+    var Router = Backbone.Marionette.AppRouter.extend({
+        controller: new RouteController(),
+        appRoutes: {
+            'schedule/:slug':   'view_schedule',
+            '':                 'view_schedules',
+        },
     });
 
-    return RouterRouter;
+    return Router;
 });
