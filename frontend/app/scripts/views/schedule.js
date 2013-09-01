@@ -3,16 +3,19 @@
 define([
     'jquery',
     'lodash',
-    'backbone',
+    'backbone.marionette',
     'templates'
 ], function ($, _, Backbone, JST) {
     'use strict';
 
-    var ScheduleView = Backbone.View.extend({
+    var ScheduleView = Backbone.Marionette.ItemView.extend({
         template: JST['app/scripts/templates/schedule.ejs'],
-        render: function() {
-            this.$el.html(this.template(this.model.attributes));
-            return this;
+        tagName: 'li',
+        events: {
+            'click a[data-internal]': function(e) {
+                e.preventDefault();
+                Backbone.history.navigate(e.target.pathname, {trigger: true});
+            }
         },
     });
 

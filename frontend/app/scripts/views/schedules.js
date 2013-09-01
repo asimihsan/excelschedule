@@ -3,31 +3,16 @@
 define([
     'jquery',
     'lodash',
-    'backbone',
+    'backbone.marionette',
     'templates',
-    'views/schedule',
-    'models/schedule',
-], function ($, _, Backbone, JST, ScheduleView, ScheduleModel) {
+    'views/schedule'
+], function ($, _, Backbone, JST, ScheduleView) {
     'use strict';
 
-    var SchedulesView = Backbone.View.extend({
+    var SchedulesView = Backbone.Marionette.CompositeView.extend({
         template: JST['app/scripts/templates/schedules.ejs'],
-        render: function() {
-            var schedules = this.collection.map(function(schedule) {
-                return new ScheduleModel(schedule.attributes);
-            });
-            this.$el.html(this.template({
-                'schedules': schedules,
-                renderSchedule: function(schedule) {
-                    var scheduleView = new ScheduleView({
-                        model: schedule,
-                    });
-                    scheduleView.render();
-                    return scheduleView.$el.html();
-                },
-            }));
-            return this;
-        },
+        itemView: ScheduleView,
+        tagName: 'ul',
     });
 
     return SchedulesView;
