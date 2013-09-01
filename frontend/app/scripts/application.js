@@ -15,7 +15,7 @@ define([
 
     var template = JST['app/scripts/templates/app.ejs'];
     var App = new Backbone.Marionette.Application();
-    App.addRegions({});
+    Communicator.reqres.request("RM:addRegion", "mainRegion", "#app");
     App.addInitializer(function() {
         Backbone.history.start({pushState: false});
     });

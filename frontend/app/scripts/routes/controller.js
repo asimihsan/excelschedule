@@ -4,7 +4,8 @@ define([
     'backbone.marionette',
     'collections/schedules',
     'views/schedules',
-], function(Backbone, SchedulesCollection, SchedulesView) {
+    'communicator',
+], function(Backbone, SchedulesCollection, SchedulesView, Communicator) {
     'use strict';
 
     var RouteController = Backbone.Marionette.Controller.extend({
@@ -13,7 +14,9 @@ define([
         },
         view_schedule: function() {
             console.log("RouterController schedule");
-            $("#app").empty();
+            var mainRegion =
+                      Communicator.reqres.request("RM:getRegion", "mainRegion");
+            mainRegion.reset();
         },
         index: function() {
             console.log("RouterController schedules");
@@ -26,8 +29,10 @@ define([
                 {slug: 'spring-2015', title: 'Spring 2015'}
             ]);
             this.schedulesView.render();
-            $("#app").empty();
-            $("#app").append(this.schedulesView.el);
+            var mainRegion =
+                      Communicator.reqres.request("RM:getRegion", "mainRegion");
+            mainRegion.reset();
+            mainRegion.show(this.schedulesView);
         },
     });
 
