@@ -4,22 +4,27 @@ define([
     'backbone.marionette',
     'collections/schedules',
     'views/schedules',
+    'views/login',
     'communicator',
-], function(Backbone, SchedulesCollection, SchedulesView, Communicator) {
+], function(Backbone, SchedulesCollection, SchedulesView, LoginView, Communicator) {
     'use strict';
 
     var RouteController = Backbone.Marionette.Controller.extend({
-        initialize: function(options) {
-            console.log("RouterController initialize");
-        },
         view_schedule: function() {
             console.log("RouterController schedule");
-            var mainRegion =
-                      Communicator.reqres.request("RM:getRegion", "mainRegion");
-            mainRegion.reset();
+            var mainRegion = 
+                Communicator.reqres.request("RegionManager:getRegion",
+                                            "mainRegion");
+            mainRegion.close();
         },
         index: function() {
-            console.log("RouterController schedules");
+            console.log("RouterController index");
+            var mainRegion = 
+                Communicator.reqres.request("RegionManager:getRegion",
+                                            "mainRegion");
+            mainRegion.show(new LoginView());
+
+            /*
             this.schedulesCollection = new SchedulesCollection();
             this.schedulesView = new SchedulesView({
                 collection: this.schedulesCollection
@@ -29,10 +34,11 @@ define([
                 {slug: 'spring-2015', title: 'Spring 2015'}
             ]);
             this.schedulesView.render();
-            var mainRegion =
-                      Communicator.reqres.request("RM:getRegion", "mainRegion");
-            mainRegion.reset();
+            var mainRegion = 
+                Communicator.reqres.request("RegionManager:getRegion",
+                                            "mainRegion");
             mainRegion.show(this.schedulesView);
+            */
         },
     });
 

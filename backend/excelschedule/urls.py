@@ -1,17 +1,7 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import patterns, url
 
-# Uncomment the next two lines to enable the admin:
-# from django.contrib import admin
-# admin.autodiscover()
-
-urlpatterns = patterns('',
-    # Examples:
-    # url(r'^$', 'excelschedule.views.home', name='home'),
-    # url(r'^excelschedule/', include('excelschedule.foo.urls')),
-
-    # Uncomment the admin/doc line below to enable admin documentation:
-    # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-
-    # Uncomment the next line to enable the admin:
-    # url(r'^admin/', include(admin.site.urls)),
+urlpatterns = patterns(
+    'api.views',
+    url(r'^api/login', 'login', name='login'),
+    url(r'^api/csrf_token', 'csrf_token', name='csrf_token'),
 )
