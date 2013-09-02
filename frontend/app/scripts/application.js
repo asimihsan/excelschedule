@@ -1,13 +1,11 @@
 /*global define*/
 
 define([
-    'jquery',
-    'lodash',
     'backbone.marionette',
     'templates',
     'communicator',
     'routes/router',
-], function ($, _, Backbone, JST, Communicator, Router) {
+], function (Backbone, JST, Communicator, Router) {
     'use strict';
 
     var router = new Router();
@@ -15,7 +13,8 @@ define([
 
     var template = JST['app/scripts/templates/app.ejs'];
     var App = new Backbone.Marionette.Application();
-    Communicator.reqres.request("RM:addRegion", "mainRegion", "#app");
+    Communicator.reqres.request("RegionManager:addRegion", "mainRegion",
+                                "#app");
     App.addInitializer(function() {
         Backbone.history.start({pushState: false});
     });

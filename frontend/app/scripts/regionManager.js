@@ -14,9 +14,9 @@ function( Backbone, Communicator ) {
             this._regionManager = new Backbone.Marionette.RegionManager();
 
             /* event API */
-            Communicator.reqres.setHandler("RM:addRegion", this.addRegion, this);
-            Communicator.reqres.setHandler("RM:removeRegion", this.removeRegion, this);
-            Communicator.reqres.setHandler("RM:getRegion", this.getRegion, this);
+            Communicator.reqres.setHandler("RegionManager:addRegion", this.addRegion, this);
+            Communicator.reqres.setHandler("RegionManager:removeRegion", this.removeRegion, this);
+            Communicator.reqres.setHandler("RegionManager:getRegion", this.getRegion, this);
         },
 
         /* add region facade */

@@ -37,6 +37,7 @@ require([
     'backbone',
     'application',
     'regionManager',
+    'sessionManager',
 ], function (Backbone, App) {
     App.start();
 });
