@@ -22,10 +22,15 @@ require.config({
         bootstrap: {
             deps: ['jquery'],
             exports: 'jquery'
-        }
+        },
+        'jquery.cookie': {
+            deps: ['jquery'],
+            exports: 'jquery'  
+        },
     },
     paths: {
         jquery: '../bower_components/jquery/jquery',
+        'jquery.cookie': '../bower_components/jquery-cookie/jquery.cookie',
         backbone: '../bower_components/backbone/backbone',
         'backbone.marionette': '../bower_components/backbone.marionette/lib/backbone.marionette',
         lodash: '../bower_components/lodash/lodash',
@@ -38,6 +43,7 @@ require([
     'application',
     'regionManager',
     'sessionManager',
+    'jquery.cookie',
 ], function (Backbone, App) {
     App.start();
 });

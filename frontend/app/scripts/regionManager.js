@@ -1,8 +1,9 @@
 define([
     'backbone.marionette',
-    'communicator'
+    'communicator',
+    'layouts/mainLayout',
 ],
-function( Backbone, Communicator ) {
+function(Backbone, Communicator, MainLayout) {
     'use strict';
 
     var RegionManager = Backbone.Marionette.Controller.extend({
@@ -11,7 +12,8 @@ function( Backbone, Communicator ) {
             console.log("initialize a Region Manager");
 
             /* internal region manager */
-            this._regionManager = new Backbone.Marionette.RegionManager();
+            this._layout = new MainLayout();
+            this._layout.render();
 
             /* event API */
             Communicator.reqres.setHandler("RegionManager:addRegion", this.addRegion, this);
@@ -20,25 +22,23 @@ function( Backbone, Communicator ) {
         },
 
         /* add region facade */
-        addRegion: function( regionName, regionId ) {
-            var region = this.getRegion( regionName );
-
-            if( region ) {
+        addRegion: function(regionName, regionId) {
+            var region = this.getRegion(regionName);
+            if(region) {
                 console.log("REGION ALREADY CREATED TO JUST RETURN REF");
                 return region;
             }
-
-            return this._regionManager.addRegion( regionName, regionId );
+            return this._layout.addRegion(regionName, regionId);
         },
 
         /* remove region facade */
-        removeRegion: function( regionName ) {
-            this._regionManager.removeRegion( regionName );
+        removeRegion: function(regionName) {
+            this._layout.removeRegion(regionName);
         },
 
         /* get region facade */
-        getRegion: function( regionName ) {
-            return this._regionManager.get( regionName );
+        getRegion: function(regionName) {
+            return this._layout[regionName];
         }
     });
 
