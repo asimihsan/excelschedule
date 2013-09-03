@@ -99,8 +99,8 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    # Uncomment the next line for simple clickjacking protection:
-    # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    #'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
 ROOT_URLCONF = 'excelschedule.urls'
@@ -123,6 +123,13 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
     'django.contrib.admindocs',
+
+    # Third-party
+    'corsheaders',
+    'tastypie',
+
+    # My apps
+    'api',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -156,7 +163,7 @@ LOGGING = {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
             'formatter': 'simple',
-            'stream': 'ext://sys.stdout',
+            'stream': 'ext://sys.stderr',
         },
     },
     'loggers': {
@@ -165,10 +172,11 @@ LOGGING = {
             'level': 'ERROR',
             'propagate': True,
         },
-        'apps': {
+        'api': {
             'handlers': ['console'],
             'level': 'DEBUG'
         },
     },
 }
 
+CSRF_FAILURE_VIEW = 'api.views.csrf_failure'

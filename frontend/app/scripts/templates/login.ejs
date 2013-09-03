@@ -1,15 +1,12 @@
 <div class="span4 offset4 well" id="login-form">
     <legend>Please Sign In</legend>
     <div class="alert alert-error">
-        <a class="close" data-dismiss="alert" href="#">×</a>Incorrect username or password!
+        <a class="close" data-dismiss="alert" href="#">×</a><span class="message"></span>
     </div>
     <form method="POST" action="/api/login" accept-charset="UTF-8">
         <input type="hidden" class="csrf-token" name="csrfmiddlewaretoken">
         <input type="text" class="span4 username" name="username" placeholder="Username">
         <input type="password" class="span4 password" name="password" placeholder="Password">
-        <label class="checkbox">
-            <input type="checkbox" name="remember" value="1"> Remember Me
-        </label>
         <button type="submit" name="submit" class="btn btn-info btn-block">Sign in</button>
     </form>    
 </div>

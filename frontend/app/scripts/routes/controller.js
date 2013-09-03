@@ -2,43 +2,72 @@
 
 define([
     'backbone.marionette',
+    'models/schedule',
     'collections/schedules',
     'views/schedules',
     'views/login',
+    'views/navbar',
     'communicator',
-], function(Backbone, SchedulesCollection, SchedulesView, LoginView, Communicator) {
+], function(Backbone, ScheduleModel, SchedulesCollection, SchedulesView,
+            LoginView, NavbarView, Communicator) {
     'use strict';
 
     var RouteController = Backbone.Marionette.Controller.extend({
-        view_schedule: function() {
-            console.log("RouterController schedule");
-            var mainRegion = 
-                Communicator.reqres.request("RegionManager:getRegion",
-                                            "mainRegion");
-            mainRegion.close();
+        _navbarRegion: function() {
+            return Communicator.reqres.request("RegionManager:getRegion",
+                                               "navbar");
+        },
+        _mainRegion: function() {
+            return Communicator.reqres.request("RegionManager:getRegion",
+                                               "content");
+        },
+        maybeRedirectToLogin: function() {
+            var isUserAuthenticated =
+              Communicator.reqres.request("SessionManager:isUserAuthenticated");
+            isUserAuthenticated.done(function(response) {
+                if (response.is_user_authenticated === false) {
+                    Backbone.history.navigate('#login', {trigger: true});
+                    return true;
+                }
+                return false;
+            });
+        },
+        view_schedule: function(slug) {
+            console.log("RouterController schedule. slug: " + slug);
+            var scheduleModel = new ScheduleModel({'slug': slug});
+            this._handleSyncError(scheduleModel);
+            scheduleModel.fetch();
+            this._mainRegion().close();
         },
         index: function() {
             console.log("RouterController index");
-            var mainRegion = 
-                Communicator.reqres.request("RegionManager:getRegion",
-                                            "mainRegion");
-            mainRegion.show(new LoginView());
-
-            /*
-            this.schedulesCollection = new SchedulesCollection();
-            this.schedulesView = new SchedulesView({
-                collection: this.schedulesCollection
+            Backbone.history.navigate('#schedules', {trigger: true});
+        },
+        login: function() {
+            this._navbarRegion().close();
+            this._mainRegion().show(new LoginView());
+        },
+        schedules: function() {
+            var navbarView = new NavbarView();
+            this._navbarRegion().show(navbarView);
+            var schedulesCollection = new SchedulesCollection();
+            var schedulesView = new SchedulesView({
+                collection: schedulesCollection
             });
-            this.schedulesCollection.reset([
-                {slug: 'winter-2014', title: 'Winter 2014'},
-                {slug: 'spring-2015', title: 'Spring 2015'}
-            ]);
-            this.schedulesView.render();
-            var mainRegion = 
-                Communicator.reqres.request("RegionManager:getRegion",
-                                            "mainRegion");
-            mainRegion.show(this.schedulesView);
-            */
+            this._mainRegion().show(schedulesView);
+            this._handleSyncError(schedulesCollection);
+            schedulesCollection.fetch();
+        },
+        _handleSyncError: function(model) {
+            this.listenTo(model, 'error', function(model, xhr, options) {
+                console.log("error while syncing.");
+                if (xhr.status == 401) {
+                    console.log("unauthorized, redirect");
+                    localStorage.setItem('urlAfterLogin',
+                                         '#' + _.last(window.location.href.split('#')));
+                    Backbone.history.navigate('#login', {trigger: true});
+                }
+            });
         },
     });
 

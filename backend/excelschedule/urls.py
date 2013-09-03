@@ -1,7 +1,11 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import patterns, include, url
+
+from django.contrib import admin
+admin.autodiscover()
 
 urlpatterns = patterns(
-    'api.views',
-    url(r'^api/login', 'login', name='login'),
-    url(r'^api/csrf_token', 'csrf_token', name='csrf_token'),
+    '',
+    url(r'^api/', include('api.urls')),
+    url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
+    url(r'^admin/', include(admin.site.urls)),
 )
