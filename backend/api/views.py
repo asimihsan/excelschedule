@@ -1,11 +1,16 @@
 import logging
+import shutil
+import tempfile
 
+from celery.result import AsyncResult
 from django.contrib.auth import authenticate, login
 from django.core.exceptions import PermissionDenied
 from django.middleware import csrf
 from django.views.decorators.http import require_GET, require_POST
-
 from jsonview.decorators import json_view
+import jsonview.exceptions
+
+import tasks
 
 
 @json_view
@@ -50,5 +55,36 @@ def upload_csv(request, slug):
         logger.error("permission denied for user: %s" % request.user)
         raise PermissionDenied()
     logger.info("slug: %s" % slug)
-    file_handle = request.FILES.values()[0]
-    return {}
+    input_fh = request.FILES.values()[0]
+    output_fh = tempfile.NamedTemporaryFile(delete=False)
+    shutil.copyfileobj(input_fh, output_fh)
+    output_fh.close()
+    result = tasks.process_csv.delay(output_fh.name)
+    return {
+        "result_id": result.id
+    }
+
+
+@require_GET
+@json_view
+def get_async_task_status(request):
+    logger = logging.getLogger("api.get_async_task_status")
+    if not request.user.is_authenticated():
+        logger.error("permission denied for user: %s" % request.user)
+        raise PermissionDenied()
+    result_id = request.GET.get('result_id', None)
+    if not result_id:
+        raise jsonview.exceptions.BadRequest('Need a result_id parameter')
+
+    result = AsyncResult(result_id)
+    return_value = {"result_id": result_id}
+    if not result.ready():
+        return_value["ready"] = False
+        return return_value
+    return_value["ready"] = True
+    if result.failed():
+        return_value["failed"] = True
+        return return_value
+    return_value["failed"] = False
+    return_value["result"] = result.result
+    return return_value

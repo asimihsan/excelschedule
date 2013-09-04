@@ -6,6 +6,9 @@ $iconSpritePath: '/images/glyphicons-halflings.png';
     #content {
         font-size: 150%;
         line-height: 1.5em;
+        li {
+            line-height: 1.5em;
+        }
     }
     #login-form {
         margin-top: 4em;
