@@ -7,10 +7,10 @@ v1_api.register(ScheduleResource())
 
 urlpatterns = patterns(
     'api.views',
-    url(r'^login', 'login_view', name='login'),
-    url(r'^csrf_token', 'csrf_token', name='csrf_token'),
-    url(r'^is_user_authenticated', 'is_user_authenticated',
-        name='is_user_authenticated'),
+    url(r'^login', 'login_view'),
+    url(r'^csrf_token', 'csrf_token'),
+    url(r'^is_user_authenticated', 'is_user_authenticated'),
+    url(r'^upload_csv/(?P<slug>[A-Za-z0-9_.-]+)$', 'upload_csv'),
 
     url(r'', include(v1_api.urls)),
 )

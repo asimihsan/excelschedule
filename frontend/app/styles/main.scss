@@ -1,12 +1,18 @@
 $iconSpritePath: '/images/glyphicons-halflings.png';
 @import 'sass-bootstrap/lib/bootstrap';
+@import 'sass-bootstrap/lib/responsive';
 
-#content {
-    li {
-        font-size: 200%;
+#app {
+    #content {
+        font-size: 150%;
         line-height: 1.5em;
     }
     #login-form {
         margin-top: 4em;
+    }
+    #sidebar {
+        ul.nav.nav-list.well {
+            padding: 0em 1em 0.5em 1em;
+        }    
     }
 }
