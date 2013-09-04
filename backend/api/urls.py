@@ -11,6 +11,7 @@ urlpatterns = patterns(
     url(r'^csrf_token', 'csrf_token'),
     url(r'^is_user_authenticated', 'is_user_authenticated'),
     url(r'^upload_csv/(?P<slug>[A-Za-z0-9_.-]+)$', 'upload_csv'),
+    url(r'^get_async_task_status', 'get_async_task_status'),
 
     url(r'', include(v1_api.urls)),
 )

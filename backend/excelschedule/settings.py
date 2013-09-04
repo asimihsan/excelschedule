@@ -127,6 +127,8 @@ INSTALLED_APPS = (
     # Third-party
     'corsheaders',
     'tastypie',
+    'djcelery',
+    'south',
 
     # My apps
     'api',
@@ -180,3 +182,16 @@ LOGGING = {
 }
 
 CSRF_FAILURE_VIEW = 'api.views.csrf_failure'
+
+# ---------------------------------------------------------------------------
+#   celery settings.
+# ---------------------------------------------------------------------------
+import djcelery
+djcelery.setup_loader()
+
+BROKER_URL = 'redis://localhost:6379/0'
+CELERY_IMPORTS = []
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_RESULT_PERSISTENT = True
+CELERY_TASK_RESULT_EXPIRES = 18000 # 5 hours
+# ---------------------------------------------------------------------------
