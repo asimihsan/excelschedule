@@ -7,10 +7,11 @@ define([
     var Router = Backbone.Marionette.AppRouter.extend({
         controller: new RouteController(),
         appRoutes: {
-            '':                 'index',
-            'schedule/:slug':   'view_schedule',
-            'login':            'login',
-            'schedules':        'schedules',
+            '':                            'index',
+            'schedule/:slug':              'view_schedule',
+            'schedule/:slug/upload_csv':   'upload_csv',
+            'login':                       'login',
+            'schedules':                   'schedules',
         },
     });
 

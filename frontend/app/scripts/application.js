@@ -13,6 +13,8 @@ define([
     var App = new Backbone.Marionette.Application();
     Communicator.reqres.request("RegionManager:addRegion", "navbar",
                                 "#navbar");
+    Communicator.reqres.request("RegionManager:addRegion", "sidebar",
+                                "#sidebar");
     Communicator.reqres.request("RegionManager:addRegion", "content",
                                 "#content");
     App.addInitializer(function() {

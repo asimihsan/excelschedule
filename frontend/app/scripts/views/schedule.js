@@ -10,7 +10,7 @@ define([
 
     var ScheduleView = Backbone.Marionette.ItemView.extend({
         template: JST['app/scripts/templates/schedule.ejs'],
-        tagName: 'li',
+        tagName: 'tr',
         events: {
             'click a[data-internal]': function(e) {
                 e.preventDefault();

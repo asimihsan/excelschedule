@@ -41,3 +41,14 @@ def csrf_token(request):
 @json_view
 def is_user_authenticated(request):
     return {"is_user_authenticated": request.user.is_authenticated()}
+
+
+@json_view
+def upload_csv(request, slug):
+    logger = logging.getLogger("api.upload_csv")
+    if not request.user.is_authenticated():
+        logger.error("permission denied for user: %s" % request.user)
+        raise PermissionDenied()
+    logger.info("slug: %s" % slug)
+    file_handle = request.FILES.values()[0]
+    return {}
