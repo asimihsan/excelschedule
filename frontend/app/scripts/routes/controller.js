@@ -48,15 +48,22 @@ define([
             this._mainRegion().show(new LoginView());
         },
         schedules: function() {
-            var navbarView = new NavbarView();
-            this._navbarRegion().show(navbarView);
             var schedulesCollection = new SchedulesCollection();
             var schedulesView = new SchedulesView({
                 collection: schedulesCollection
             });
-            this._mainRegion().show(schedulesView);
+            var navbarView = new NavbarView();
+
+            this._mainRegion().close();
+            this._navbarRegion().close();
             this._handleSyncError(schedulesCollection);
-            schedulesCollection.fetch();
+            var that = this;
+            schedulesCollection.fetch({
+                success: function() {
+                    that._mainRegion().show(schedulesView);
+                    that._navbarRegion().show(navbarView);
+                },
+            });
         },
         _handleSyncError: function(model) {
             this.listenTo(model, 'error', function(model, xhr, options) {

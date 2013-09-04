@@ -39,7 +39,7 @@ function(Backbone, Communicator, MainLayout) {
         /* get region facade */
         getRegion: function(regionName) {
             return this._layout[regionName];
-        }
+        },
     });
 
     return new RegionManager();
