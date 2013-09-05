@@ -12,8 +12,6 @@ function($, Backbone, Communicator) {
             this.refreshCsrfToken();
 
             /* event API */
-            Communicator.command.setHandler("SessionManager:refreshCsrfToken",
-                                            this.refreshCsrfToken, this);
             Communicator.reqres.setHandler("SessionManager:getCsrfToken",
                                            this.getCsrfToken, this);
             Communicator.reqres.setHandler("SessionManager:isUserAuthenticated",

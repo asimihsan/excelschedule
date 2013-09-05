@@ -21,9 +21,6 @@ define([
         events: {
             'submit form': 'submit',
         },
-        initialize: function() {
-            this.refreshCsrfToken();
-        },
         onRender: function() {
             this.hideError();
             this.testCookies();
@@ -35,16 +32,10 @@ define([
         hideError: function() {
             this.ui.error.hide();
         },
-        refreshCsrfToken: function() {
-            Communicator.command.execute("SessionManager:refreshCsrfToken");
-            Communicator.mediator.on("SessionManager:refreshCsrfToken", function() {
-                this.csrfToken =
-                     Communicator.reqres.request("SessionManager:getCsrfToken");
-                this.ui.csrfToken.val(this.csrfToken);
-            }, this);
-        },
         submit: function(e) {
             e.preventDefault();
+            this.ui.csrfToken.val(
+                   Communicator.reqres.request("SessionManager:getCsrfToken"));
             $.ajax(this.ui.form.attr('action'), {
                 context: this,
                 type: this.ui.form.attr('method'),

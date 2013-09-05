@@ -19,6 +19,8 @@ define([
         },
         initialize: function() {
             this.state = "started";
+            this.csrfToken =
+                    Communicator.reqres.request("SessionManager:getCsrfToken");
         },
         getTemplate: function() {
             if (this.state === "started")
@@ -38,27 +40,19 @@ define([
             }
             return data;
         },
-        refreshCsrfToken: function(callback) {
-            Communicator.command.execute("SessionManager:refreshCsrfToken");
-            Communicator.mediator.on("SessionManager:refreshCsrfToken", function() {
-                this.csrfToken =
-                     Communicator.reqres.request("SessionManager:getCsrfToken");
-                callback(this);
-            }, this);
-        },
         onRender: function() {
-            this.refreshCsrfToken(this.setupFileUpload);
+            this.setupFileUpload();
         },
-        setupFileUpload: function(that) {
-            var url = '/api/upload_csv/' + that.model.escape('slug');
-            that.ui.fileupload.fileupload({
+        setupFileUpload: function() {
+            var that = this;
+            var url = '/api/upload_csv/' + this.model.escape('slug');
+            this.ui.fileupload.fileupload({
                 url: url,
                 dataType: 'json',
                 headers: {
                     'X-CSRFToken': that.csrfToken,
                 },
                 done: function (e, data) {
-                    console.log("file uploaded");
                     that.state = "finishedUpload";
                     that.result_id = data.result.result_id;
                     that.resultPollerTimer = setTimeout(function() {
@@ -98,7 +92,6 @@ define([
                         console.log("Failed to process the CSV!");
                         return;
                     }
-                    console.log("response ready");
                     this.state = "finishedProcessCsv";
                     this.collection = 
                       new SurveyResultsCollection(JSON.parse(response.result));
