@@ -2,42 +2,73 @@
 
 <% _.each(items, function(item) { %>
 <h4>Professor: <%= item.name %></h4>
-<ul>
-    <li>Start date: <%= item.start_date %></li>
-    <li>End date: <%= item.end_date %></li>
-    <li>Course title: <%= item.course_title %></li>
-    <li>Course number: <%= item.course_number %></li>
-    <li>First choices:
-        <ul>
-        <% _.each(item.first_choices, function(choice) { %>
-            <li><%= choice %></li>
-        <% }); %>
-        </ul>
-    </li>
-    <li>Second choices:
-        <ul>
-        <% _.each(item.second_choices, function(choice) { %>
-            <li><%= choice %></li>
-        <% }); %>
-        </ul>
-    </li>
-    <li>Third choices:
-        <ul>
-        <% _.each(item.third_choices, function(choice) { %>
-            <li><%= choice %></li>
-        <% }); %>
-        </ul>
-    </li>
-    <li>Other additional availability: <%= item.other_additional_availability %></li>
-    <li>Other preferred times: <%= item.other_preferred_times %></li>
-    <li>Unavailable times:
-        <ul>
-        <% _.each(item.unavailable_times, function(time) { %>
-            <li><%= time %></li>
-        <% }); %>
-        </ul>
-    </li>
-    <li>Shouldn't conflict with these courses: <%= item.no_conflict_courses %></li>
-    <li>Other comments: <%= item.other_comments %></li>
-</ul>
+
+<table class="table table-bordered table-hover">
+    <tbody>
+        <tr>
+            <td>Course title</td>
+            <td><%= item.course_title %></td>
+        </tr>
+        <tr>
+            <td>Course number</td>
+            <td><%= item.course_number %></td>
+        </tr>
+        <tr>
+            <td>First choices</td>
+            <td>
+                <ul>
+                    <% _.each(item.first_choices, function(choice) { %>
+                        <li><%= choice %></li>
+                    <% }); %>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>Second choices</td>
+            <td>
+                <ul>
+                    <% _.each(item.second_choices, function(choice) { %>
+                        <li><%= choice %></li>
+                    <% }); %>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>Third choices</td>
+            <td>
+                <ul>
+                    <% _.each(item.third_choices, function(choice) { %>
+                        <li><%= choice %></li>
+                    <% }); %>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>Other additional availability</td>
+            <td><%= item.other_additional_availability %></td>
+        </tr>
+        <tr>
+            <td>Other preferred times</td>
+            <td><%= item.other_preferred_times %></td>
+        </tr>
+        <tr>
+            <td>Unavailable times</td>
+            <td>
+                <ul>
+                    <% _.each(item.unavailable_times, function(time) { %>
+                        <li><%= time %></li>
+                    <% }); %>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>Shouldn't conflict with these courses</td>
+            <td><%= item.no_conflict_courses %></td>
+        </tr>
+        <tr>
+            <td>Other comments</td>
+            <td><%= item.other_comments %></td>
+        </tr>
+    </tbody>
+</table>
 <% }); %>

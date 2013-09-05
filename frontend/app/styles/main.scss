@@ -9,6 +9,14 @@ $iconSpritePath: '/images/glyphicons-halflings.png';
         li {
             line-height: 1.5em;
         }
+        .scheduleUploadCsv {
+            table {
+                table-layout: fixed;
+            }
+            .table th, .table td {
+                line-height: 1.25em;
+            }
+        } 
     }
     #login-form {
         margin-top: 4em;
