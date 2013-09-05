@@ -5,7 +5,6 @@ import tempfile
 from celery.result import AsyncResult
 from django.contrib.auth import authenticate, login
 from django.core.exceptions import PermissionDenied
-from django.middleware import csrf
 from django.views.decorators.http import require_GET, require_POST
 from jsonview.decorators import json_view
 import jsonview.exceptions
@@ -34,12 +33,6 @@ def login_view(request):
     else:
         logger.debug("username %s not present or inactive" % username)
         raise PermissionDenied("Username and/or password not correct.")
-
-
-@require_GET
-@json_view
-def csrf_token(request):
-    return {"csrf_token": csrf.get_token(request)}
 
 
 @require_GET
