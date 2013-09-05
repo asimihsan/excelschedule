@@ -1,2 +1,4 @@
 <li class="nav-header">Tasks</li>
+<% if (typeof slug !== "undefined") { %>
 <li class="upload_csv"><a href="#schedule/<%= slug %>/upload_csv">Upload exported CSV</a></li>
+<% } %>

@@ -95,7 +95,10 @@ define([
         },
         login: function() {
             this._navbarRegion().close();
-            this._sidebarRegion().close();
+            var sidebarView = new SidebarView({
+                hidden: true,
+            });
+            this._sidebarRegion().show(sidebarView);
             this._mainRegion().show(new LoginView());
         },
         schedules: function() {
