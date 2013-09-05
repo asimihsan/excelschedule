@@ -18,17 +18,7 @@ function($, Backbone, Communicator) {
                                            this.isUserAuthenticated, this);
         },
         refreshCsrfToken: function() {
-            $.ajax({
-                url: '/api/csrf_token',
-                dataType: 'json',
-                context: this,
-                success: function(response) {
-                    this.csrf_token = response.csrf_token;
-                    $.cookie('csrftoken', this.csrfToken);
-                    Communicator.mediator
-                                .trigger("SessionManager:refreshCsrfToken");
-                },
-            });
+            this.csrf_token = $.cookie('csrftoken');
         },
         getCsrfToken: function() {
             return this.csrf_token;
