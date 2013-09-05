@@ -114,7 +114,8 @@ class CsvRow(object):
             value = get_unquoted_string(self.row[column_index])
             if len(value.strip()) == 0:
                 continue
-            column_name = self.header.get_column_name(column_index)
+            column_name = get_unquoted_string(
+                self.header.get_column_name(column_index))
             column_name = column_name.split("-")[-1]
             return_value.append((column_name, value))
         return return_value
@@ -146,24 +147,39 @@ class CsvRow(object):
 
     @property
     def unavailable_times(self):
-        return self._get_choices(r'^Days/Times that you are NOT available to '
+        return self._get_choices(r'Days/Times that you are NOT available to '
                                  'teach')
+
+    @property
+    @unquote_string
+    def no_conflict_courses(self):
+        return self.row[self.header.get_column_index(
+            r'Other COURSES with which your class should NOT conflict:')]
+
+    @property
+    @unquote_string
+    def other_comments(self):
+        return self.row[self.header.get_column_index(r'Other comments:')]
 
 
 class CsvRowEncoder(json.JSONEncoder):
     def default(self, o):
-        return {"start_date": o.start_date.isoformat(" "),
-                "end_date": o.end_date.isoformat(" "),
-                "name": o.name,
-                "course_title": o.course_title,
-                "course_number": o.course_number,
-                "first_choices": o.first_choices,
-                "second_choices": o.second_choices,
-                "third_choices": o.third_choices,
-                "other_additional_availability":
-                o.other_additional_availability,
-                "other_preferred_times": o.other_preferred_times,
-                "unavailable_times": o.unavailable_times}
+        return {
+            "start_date": o.start_date.isoformat(" "),
+            "end_date": o.end_date.isoformat(" "),
+            "name": o.name,
+            "course_title": o.course_title,
+            "course_number": o.course_number,
+            "first_choices": o.first_choices,
+            "second_choices": o.second_choices,
+            "third_choices": o.third_choices,
+            "other_additional_availability":
+            o.other_additional_availability,
+            "other_preferred_times": o.other_preferred_times,
+            "unavailable_times": o.unavailable_times,
+            "no_conflict_courses": o.no_conflict_courses,
+            "other_comments": o.other_comments,
+        }
 
 
 def process_csv(filepath):
@@ -174,12 +190,14 @@ def process_csv(filepath):
     rows = [CsvRow(header, line) for line in data]
     #import ipdb; ipdb.set_trace()
     return_value = json.dumps(rows, cls=CsvRowEncoder)
-    #import pprint; pprint.pprint(json.loads(return_value))
     return return_value
 
 
 def main():
-    process_csv(sys.argv[1])
+    return_value = process_csv(sys.argv[1])
+    if "--debug" in sys.argv:
+        import pprint
+        pprint.pprint(json.loads(return_value))
 
 if __name__ == "__main__":
     sys.exit(main())

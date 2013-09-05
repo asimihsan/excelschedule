@@ -19,6 +19,8 @@ define([
             other_additional_availability: '',
             other_preferred_times: '',
             unavailable_times: '',
+            no_conflict_courses: '',
+            other_comments: '',
         },
         url: function() {
             var originalUrl = Backbone.Model.prototype.url.call(this);
