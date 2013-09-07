@@ -51,9 +51,6 @@ define([
                 model: scheduleModel,
             });
 
-            this._mainRegion().close();
-            this._navbarRegion().close();
-            this._sidebarRegion().close();
             this._handleSyncError(scheduleModel);
             var that = this;
             scheduleModel.fetch({
@@ -76,9 +73,6 @@ define([
                 highlightUploadCsv: true,
             });
 
-            this._mainRegion().close();
-            this._navbarRegion().close();
-            this._sidebarRegion().close();
             this._handleSyncError(scheduleModel);
             var that = this;
             scheduleModel.fetch({
@@ -111,9 +105,6 @@ define([
                 hidden: true,
             });
 
-            this._mainRegion().close();
-            this._navbarRegion().close();
-            this._sidebarRegion().close();
             this._handleSyncError(schedulesCollection);
             var that = this;
             schedulesCollection.fetch({
@@ -129,6 +120,9 @@ define([
                 console.log("error while syncing.");
                 if (xhr.status == 401) {
                     console.log("unauthorized, redirect");
+                    this._mainRegion().close();
+                    this._navbarRegion().close();
+                    this._sidebarRegion().close();
                     localStorage.setItem('urlAfterLogin',
                                          '#' + _.last(window.location.href.split('#')));
                     Backbone.history.navigate('#login', {trigger: true});
