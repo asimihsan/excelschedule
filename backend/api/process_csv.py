@@ -94,9 +94,8 @@ def generate_data(filepath):
         lexer = make_csv_lexer(dialect)()
         lexer.build()
         for line in csv_fh:
-            tokens = [token for token in lexer.test(line.strip())]
             yield_value = []
-            for token in tokens:
+            for token in lexer.test(line.strip()):
                 if token.type == "DELIMITER":
                     continue
                 elif token.type == "DOUBLE_DELIMITER":
