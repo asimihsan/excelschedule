@@ -47,9 +47,10 @@ def make_csv_lexer(dialect):
         def t_DELIMITER(self, token):
             return token
 
-        unquote_string_template = Template(r'[^"${d}]+')
+        unquote_string_template = Template(r'[^${qc}${d}]+')
 
-        @add_doc(unquote_string_template.substitute(d=dialect.delimiter))
+        @add_doc(unquote_string_template.substitute(qc=dialect.quotechar,
+                                                    d=dialect.delimiter))
         def t_UNQUOTED_STRING(self, token):
             return token
 
