@@ -5,27 +5,104 @@ import csv
 import json
 import os
 import re
+from string import Template
 import sys
 
 import chardet
 from dateutil.parser import parse
+import ply.lex as lex
+import unicodedata
+
+
+def add_doc(value):
+    def _doc(func):
+        func.__doc__ = value
+        return func
+    return _doc
+
+
+def make_csv_lexer(dialect):
+
+    class CsvLexer(object):
+        tokens = (
+            'QUOTED_STRING',
+            'DOUBLE_DELIMITER',
+            'DELIMITER',
+            'UNQUOTED_STRING',
+        )
+
+        quoted_string_template = \
+            Template(r'${qc}(?:[^${qc}]|${qc}${qc})*${qc}')
+
+        @add_doc(quoted_string_template.substitute(qc=dialect.quotechar))
+        def t_QUOTED_STRING(self, token):
+            token.value = unicodedata.normalize('NFKD', token.value[1:-1])
+            return token
+
+        @add_doc(r'[%s]{2}' % dialect.delimiter)
+        def t_DOUBLE_DELIMITER(self, token):
+            return token
+
+        @add_doc(r'[%s]' % dialect.delimiter)
+        def t_DELIMITER(self, token):
+            return token
+
+        unquote_string_template = Template(r'[^"${d}]+')
+
+        @add_doc(unquote_string_template.substitute(d=dialect.delimiter))
+        def t_UNQUOTED_STRING(self, token):
+            return token
+
+        # Error handling rule
+        def t_error(self, t):
+            print "Illegal character at %s: '%s'" % (t.lexpos, t.value[0])
+            t.lexer.skip(1)
+
+        # Ignored characters
+        t_ignore = '\n'
+
+        # Build the lexer
+        def build(self, **kwargs):
+            self.lexer = lex.lex(module=self, **kwargs)
+
+        def test(self, data):
+            self.lexer.input(data)
+            while True:
+                t = self.lexer.token()
+                if not t:
+                    break
+                yield t
+
+    return CsvLexer
 
 
 def generate_data(filepath):
     assert(os.path.isfile(filepath))
     with open(filepath, 'rb') as csv_fh:
-        encoding = chardet.detect(csv_fh.read(1024))['encoding']
-    if "UTF-16" in encoding:
-        starting_byte = 2
-    else:
-        starting_byte = 0
+        start = csv_fh.read(1024)
+    encoding = chardet.detect(start)['encoding']
+    starting_byte = 0
+    for bom in [getattr(codecs, var) for var in vars(codecs)
+                if var.startswith("BOM")]:
+        if start.startswith(bom):
+            starting_byte = len(bom)
     with codecs.open(filepath, 'rb', encoding) as csv_fh:
         csv_fh.read(starting_byte)
         dialect = csv.Sniffer().sniff(csv_fh.read(1024))
         csv_fh.seek(starting_byte)
+        lexer = make_csv_lexer(dialect)()
+        lexer.build()
         for line in csv_fh:
-            elems = line.split(dialect.delimiter)
-            yield elems
+            tokens = [token for token in lexer.test(line.strip())]
+            yield_value = []
+            for token in tokens:
+                if token.type == "DELIMITER":
+                    continue
+                elif token.type == "DOUBLE_DELIMITER":
+                    yield_value.extend([u"", u""])
+                else:
+                    yield_value.append(token.value)
+            yield yield_value
 
 
 class Header(object):
@@ -188,7 +265,6 @@ def process_csv(filepath):
     second_line = data.next()
     header = Header(first_line, second_line)
     rows = [CsvRow(header, line) for line in data]
-    #import ipdb; ipdb.set_trace()
     return_value = json.dumps(rows, cls=CsvRowEncoder)
     return return_value
 
@@ -197,7 +273,7 @@ def main():
     return_value = process_csv(sys.argv[1])
     if "--debug" in sys.argv:
         import pprint
-        pprint.pprint(json.loads(return_value))
+        pprint.pprint(json.loads(return_value)[0])
 
 if __name__ == "__main__":
     sys.exit(main())
