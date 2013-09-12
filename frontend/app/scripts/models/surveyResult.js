@@ -21,6 +21,10 @@ define([
             unavailable_times: '',
             no_conflict_courses: '',
             other_comments: '',
+            max_students: '',
+            is_special_permission_required: '',
+            is_first_class_attendance_mandatory: '',
+            grading_option: '',
         },
         url: function() {
             var originalUrl = Backbone.Model.prototype.url.call(this);

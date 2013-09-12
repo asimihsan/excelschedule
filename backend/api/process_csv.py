@@ -26,7 +26,6 @@ def make_csv_lexer(dialect):
     class CsvLexer(object):
         tokens = (
             'QUOTED_STRING',
-            'DOUBLE_DELIMITER',
             'DELIMITER',
             'UNQUOTED_STRING',
         )
@@ -37,10 +36,6 @@ def make_csv_lexer(dialect):
         @add_doc(quoted_string_template.substitute(qc=dialect.quotechar))
         def t_QUOTED_STRING(self, token):
             token.value = unicodedata.normalize('NFKD', token.value[1:-1])
-            return token
-
-        @add_doc(r'[%s]{2}' % dialect.delimiter)
-        def t_DOUBLE_DELIMITER(self, token):
             return token
 
         @add_doc(r'[%s]' % dialect.delimiter)
@@ -95,13 +90,14 @@ def generate_data(filepath):
         lexer.build()
         for line in csv_fh:
             yield_value = []
+            seen_delimiter = False
             for token in lexer.test(line.strip()):
                 if token.type == "DELIMITER":
-                    continue
-                elif token.type == "DOUBLE_DELIMITER":
-                    yield_value.extend([u"", u""])
+                    if seen_delimiter:
+                        yield_value.append(u'')
                 else:
                     yield_value.append(token.value)
+                seen_delimiter = token.type == "DELIMITER"
             yield yield_value
 
 
@@ -238,6 +234,26 @@ class CsvRow(object):
     def other_comments(self):
         return self.row[self.header.get_column_index(r'Other comments:')]
 
+    @property
+    @unquote_string
+    def max_students(self):
+        return self.row[self.header.get_column_index(r'Q22')]
+
+    @property
+    @unquote_string
+    def is_first_class_attendance_mandatory(self):
+        return self.row[self.header.get_column_index(r'Q23')]
+
+    @property
+    @unquote_string
+    def is_special_permission_required(self):
+        return self.row[self.header.get_column_index(r'Q52')]
+
+    @property
+    @unquote_string
+    def grading_option(self):
+        return self.row[self.header.get_column_index(r'Q25')]
+
 
 class CsvRowEncoder(json.JSONEncoder):
     def default(self, o):
@@ -256,6 +272,11 @@ class CsvRowEncoder(json.JSONEncoder):
             "unavailable_times": o.unavailable_times,
             "no_conflict_courses": o.no_conflict_courses,
             "other_comments": o.other_comments,
+            "max_students": o.max_students,
+            "is_special_permission_required": o.is_special_permission_required,
+            "is_first_class_attendance_mandatory":
+            o.is_first_class_attendance_mandatory,
+            "grading_option": o.grading_option,
         }
 
 
@@ -274,6 +295,8 @@ def main():
     if "--debug" in sys.argv:
         import pprint
         pprint.pprint(json.loads(return_value)[0])
+        pprint.pprint(json.loads(return_value)[1])
+        pprint.pprint(json.loads(return_value)[2])
 
 if __name__ == "__main__":
     sys.exit(main())
