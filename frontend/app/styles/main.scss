@@ -16,6 +16,10 @@ $iconSpritePath: '/images/glyphicons-halflings.png';
             .table th, .table td {
                 line-height: 1.25em;
             }
+            hr {
+                height: 1em;
+                background: black;
+            }
         } 
     }
     #login-form {
