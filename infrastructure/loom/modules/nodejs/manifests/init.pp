@@ -8,12 +8,4 @@ class nodejs {
         ensure => latest,
         require => Class['prepare'],
     }
-     
-    $packages = ['grunt-cli',
-                 'bower']
-    package {$packages:
-        ensure   => present,
-        provider => 'npm',
-        require  => Package['nodejs'],
-    }
 }
