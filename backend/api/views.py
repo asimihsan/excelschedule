@@ -12,11 +12,6 @@ import jsonview.exceptions
 import tasks
 
 
-@json_view
-def csrf_failure(request, reason=""):
-    raise PermissionDenied("CSRF verifcation failed: %s" % reason)
-
-
 @require_POST
 @json_view
 def login_view(request):

@@ -19,8 +19,6 @@ define([
         },
         initialize: function() {
             this.state = "started";
-            this.csrfToken =
-                    Communicator.reqres.request("SessionManager:getCsrfToken");
         },
         getTemplate: function() {
             if (this.state === "started")
@@ -49,9 +47,6 @@ define([
             this.ui.fileupload.fileupload({
                 url: url,
                 dataType: 'json',
-                headers: {
-                    'X-CSRFToken': that.csrfToken,
-                },
                 done: function (e, data) {
                     that.state = "finishedUpload";
                     that.result_id = data.result.result_id;
