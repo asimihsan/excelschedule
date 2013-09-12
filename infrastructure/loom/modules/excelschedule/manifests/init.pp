@@ -7,6 +7,7 @@ class excelschedule {
 
     exec { "mkvirtualenv excelschedule":
         command => 'su - ubuntu -c "mkvirtualenv excelschedule"',
+        creates => '/home/ubuntu/.virtualenvs/excelschedule',
     }    
     exec  { "pip install requirements":
         command => 'su - ubuntu -c "workon excelschedule; pip install -r /home/ubuntu/excelschedule/requirements.txt; pyenv rehash"',
