@@ -43,4 +43,7 @@ class excelschedule {
         unless => "gem list | grep -q compass",
     }
 
+    exec { "npm install -g grunt-cli bower":
+        require => Class["nodejs"],
+    }
 }
