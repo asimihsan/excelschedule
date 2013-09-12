@@ -50,7 +50,7 @@ require.config({
     },
     paths: {
         jquery: '../bower_components/jquery/jquery',
-        'jquery.cookie': '../bower_components/jquery-cookie/jquery.cookie',
+        'jquery.cookie': '../bower_components/jquery.cookie/jquery.cookie',
         'jquery.noty': '../bower_components/noty/js/noty/jquery.noty',
         'jquery.noty.layout.top': '../bower_components/noty/js/noty/layouts/top',
         'jquery.noty.themes.default': '../bower_components/noty/js/noty/themes/default',

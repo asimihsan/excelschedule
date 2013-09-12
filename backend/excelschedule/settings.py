@@ -51,7 +51,7 @@ USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/var/www/example.com/media/"
-MEDIA_ROOT = ''
+MEDIA_ROOT = os.path.join(PROJECT_DIR, "incoming")
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
@@ -62,7 +62,7 @@ MEDIA_URL = ''
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/var/www/example.com/static/"
-STATIC_ROOT = ''
+STATIC_ROOT = os.path.join(PROJECT_DIR, "static") + os.sep
 
 # URL prefix for static files.
 # Example: "http://example.com/static/", "http://static.example.com/"
@@ -189,9 +189,9 @@ CSRF_FAILURE_VIEW = 'api.views.csrf_failure'
 import djcelery
 djcelery.setup_loader()
 
-BROKER_URL = 'redis://localhost:6379/0'
+BROKER_URL = 'redis://localhost:6379/3'
 CELERY_IMPORTS = []
-CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/3'
 CELERY_RESULT_PERSISTENT = True
-CELERY_TASK_RESULT_EXPIRES = 18000 # 5 hours
+CELERY_TASK_RESULT_EXPIRES = 18000  # 5 hours
 # ---------------------------------------------------------------------------

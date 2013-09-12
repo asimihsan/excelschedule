@@ -44,7 +44,8 @@ grunt
 
 ```
 pip install -r requirements.txt
-django-admin.py startproject excelschedule
 chmod a+x manage.py
+./manage.py syncdb
+yes yes | ./manage.py collectstatic
 ./manage.py runserver 8000
 ```
