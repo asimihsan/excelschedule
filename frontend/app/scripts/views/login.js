@@ -15,7 +15,6 @@ define([
         ui: {
             error: 'div.alert-error',
             errorMessage: 'div.alert-error .message',
-            csrfToken: 'input.csrf-token',
             form: 'form',
         },
         events: {
@@ -34,8 +33,6 @@ define([
         },
         submit: function(e) {
             e.preventDefault();
-            this.ui.csrfToken.val(
-                   Communicator.reqres.request("SessionManager:getCsrfToken"));
             $.ajax(this.ui.form.attr('action'), {
                 context: this,
                 type: this.ui.form.attr('method'),
