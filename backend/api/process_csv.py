@@ -91,7 +91,7 @@ def generate_data(filepath):
         for line in csv_fh:
             yield_value = []
             seen_delimiter = False
-            for token in lexer.test(line.strip()):
+            for token in lexer.test(line.rstrip('\n')):
                 if token.type == "DELIMITER":
                     if seen_delimiter:
                         yield_value.append(u'')
