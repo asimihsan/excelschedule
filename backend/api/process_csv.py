@@ -254,6 +254,34 @@ class CsvRow(object):
     def grading_option(self):
         return self.row[self.header.get_column_index(r'Q25')]
 
+    @property
+    @unquote_string
+    def final_exam(self):
+        return self.row[self.header.get_column_index(r'Q62')]
+
+    @property
+    @unquote_string
+    def prequisites_are_mandatory(self):
+        return self.row[self.header.get_column_index(r'Q56')]
+
+    @property
+    @unquote_string
+    def additional_prerequisites(self):
+        return self.row[self.header.get_column_index(r'Q55')]
+
+    @property
+    @unquote_string
+    def additional_comments(self):
+        return self.row[self.header.get_column_index(r'Q30')]
+
+    @property
+    def room_or_building_choices(self):
+        return self._get_choices("^Q27_")
+
+    @property
+    def equipment_facilities_needed(self):
+        return self._get_choices("^Q29_")
+
 
 class CsvRowEncoder(json.JSONEncoder):
     def default(self, o):
@@ -277,6 +305,12 @@ class CsvRowEncoder(json.JSONEncoder):
             "is_first_class_attendance_mandatory":
             o.is_first_class_attendance_mandatory,
             "grading_option": o.grading_option,
+            "final_exam": o.final_exam,
+            "prequisites_are_mandatory": o.prequisites_are_mandatory,
+            "additional_prerequisites": o.additional_prerequisites,
+            "additional_comments": o.additional_comments,
+            "room_or_building_choices": o.room_or_building_choices,
+            "equipment_facilities_needed": o.equipment_facilities_needed,
         }
 
 
