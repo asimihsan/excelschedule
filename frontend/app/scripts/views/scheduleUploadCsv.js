@@ -60,9 +60,10 @@ define([
         },
         applySearchFilter: function(filter) {
             var regex = new RegExp(filter, "i");
+            var regexCourseNumber = new RegExp("Course number");
             $('tr').each(function(index, el) {
                 var text = el.textContent;
-                if (regex.test(text)) {
+                if (regexCourseNumber.test(text) || regex.test(text)) {
                     $(el).show();
                 } else {
                     $(el).hide();
