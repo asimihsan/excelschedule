@@ -25,6 +25,12 @@ define([
             is_special_permission_required: '',
             is_first_class_attendance_mandatory: '',
             grading_option: '',
+            final_exam: '',
+            prequisites_are_mandatory: '',
+            additional_prerequisites: '',
+            room_or_building_choices: '',
+            equipment_facilities_needed: '',
+            additional_comments: '',
         },
         url: function() {
             var originalUrl = Backbone.Model.prototype.url.call(this);

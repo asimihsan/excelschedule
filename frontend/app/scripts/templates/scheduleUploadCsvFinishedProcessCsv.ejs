@@ -85,7 +85,42 @@
             <td>Grading option</td>
             <td><%= item.grading_option %></td>
         </tr>
-
+        <tr>
+            <td>Final exam</td>
+            <td><%= item.final_exam %></td>
+        </tr>
+        <tr>
+            <td>Are the prerequisites mandatory?</td>
+            <td><%= item.prequisites_are_mandatory %></td>
+        </tr>
+        <tr>
+            <td>If teaching 314, 357, 358, or 359 then list additional prerequisites</td>
+            <td><%= item.additional_prerequisites %></td>
+        </tr>
+        <tr>
+            <td>Room or building choices</td>
+            <td>
+                <ul>
+                    <% _.each(item.room_or_building_choices, function(choice) { %>
+                        <li><%= choice %></li>
+                    <% }); %>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>Equipment/facilities needed</td>
+            <td>
+                <ul>
+                    <% _.each(item.equipment_facilities_needed, function(need) { %>
+                        <li><%= need %></li>
+                    <% }); %>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>Additional requests/comments/td>
+            <td><%= item.additional_comments %></td>
+        </tr>
     </tbody>
 </table>
 
