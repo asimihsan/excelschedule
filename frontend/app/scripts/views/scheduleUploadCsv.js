@@ -16,9 +16,12 @@ define([
             fileupload: '#fileupload',
             progress_bar: '#progress .progress-bar',
             files: '#files',
+            searchText: '#search_text',
         },
         initialize: function() {
             this.state = "started";
+            this.applySearchFilterDebounced =
+                _.debounce(this.applySearchFilter, 500);
         },
         getTemplate: function() {
             if (this.state === "started")
@@ -40,6 +43,31 @@ define([
         },
         onRender: function() {
             this.setupFileUpload();
+            this.setupSearchText();
+        },
+        setupSearchText: function() {
+            var that = this;
+            this.ui.searchText.keypress(function(e) {
+                return (e.keyCode || e.which || e.charCode || 0) !== 13;
+            });
+            this.ui.searchText.keyup(function(e) {
+                if ((e.keyCode || e.which || e.charCode || 0) === 13) {
+                    that.applySearchFilter(that.ui.searchText.val());
+                } else {
+                    that.applySearchFilterDebounced(that.ui.searchText.val());
+                }
+            });
+        },
+        applySearchFilter: function(filter) {
+            var regex = new RegExp(filter, "i");
+            $('tr').each(function(index, el) {
+                var text = el.textContent;
+                if (regex.test(text)) {
+                    $(el).show();
+                } else {
+                    $(el).hide();
+                }
+            });
         },
         setupFileUpload: function() {
             var that = this;
